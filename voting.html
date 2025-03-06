@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>University Elections</title>
+    <script>
+        const candidates = [
+            { name: "A Vivek", votes: 0 },
+            { name: "B Harshit", votes: 0 },
+            { name: "C Priya", votes: 0 },
+            { name: "D Nithin", votes: 0 }
+        ];
+        
+        const voters = new Set();
+        const adminPassword = "vucse";
+        
+        function castVote(candidateIndex) {
+            let section = document.getElementById("section").value.toUpperCase();
+            let rollNumber = document.getElementById("rollNumber").value;
+            
+            if (!section.match(/^[A-Z]$/) || rollNumber < 1 || rollNumber > 99) {
+                alert("Invalid section or roll number.");
+                return;
+            }
+            
+            let studentId = `231FA04${section}${String(rollNumber).padStart(2, '0')}`;
+            
+            if (voters.has(studentId)) {
+                alert("You have already voted and cannot vote again.");
+                return;
+            }
+            
+            voters.add(studentId);
+            candidates[candidateIndex].votes++;
+            alert(`Thank you for voting for ${candidates[candidateIndex].name}!`);
+        }
+        
+        function viewResults() {
+            let password = prompt("Enter admin password:");
+            if (password !== adminPassword) {
+                alert("Incorrect password. Access denied.");
+                return;
+            }
+            let results = "Election Results:\n";
+            candidates.forEach(candidate => {
+                results += `${candidate.name}: ${candidate.votes} votes\n`;
+            });
+            alert(results);
+        }
+    </script>
+</head>
+<body>
+    <h1>University Student Council Elections</h1>
+    <label>Enter Section (A-Z): <input type="text" id="section" maxlength="1"></label><br>
+    <label>Enter Roll Number (1-99): <input type="number" id="rollNumber" min="1" max="99"></label><br>
+    <button onclick="castVote(0)">Vote for A Vivek</button>
+    <button onclick="castVote(1)">Vote for B Harshit</button>
+    <button onclick="castVote(2)">Vote for C Priya</button>
+    <button onclick="castVote(3)">Vote for D Nithin</button>
+    <br><br>
+    <button onclick="viewResults()">View Results (Admin Only)</button>
+</body>
+</html>
